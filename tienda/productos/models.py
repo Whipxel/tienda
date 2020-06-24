@@ -1,41 +1,69 @@
-from django.db import models
+from django.db.models import IntegerField, ImageField, FloatField, CharField, ForeignKey, CASCADE, Model
 from django.contrib.auth import get_user_model
 
 
 # Create your models here.
-class Producto(models.Model):
-    nombre = models.CharField(max_length=100)
-    descripcion = models.CharField(max_length=100)
-    precio = models.IntegerField()
+class CarritoCompras(Model):
+    FK_UsuarioCliente = ForeignKey(get_user_model(), on_delete=CASCADE)
 
-    def __str__(self):
-        return "Producto: {} Precio: $ {}".format(self.nombre, self.precio)
+    class Meta:
+        db_table = 'CarritoCompras'
 
-class Comentario(models.Model):
-    comentario= models.CharField(max_length=300)
-    usuario = models.CharField(max_length=100)
-    fecha = models.DateTimeField(auto_now_add=True)
-    producto = models.ForeignKey(Producto, related_name="producto_comentarios", on_delete=models.CASCADE)
 
-    def __str__(self):
-        return "Comentario: {} Usuario: {} Producto: {}".format(self.comentario, self.usuario, self.producto)
+class CategoriaProducto(Model):
+    Nombre = CharField(max_length=100)
+    Descripcion = CharField(max_length=200)
 
-class Imagen(models.Model):
-    titulo = models.CharField(max_length=100)
-    imagen = models.ImageField(upload_to='imagenes_producto')
-    producto = models.ForeignKey(Producto, related_name="producto_imagen", on_delete=models.CASCADE)
+    class Meta:
+        db_table = 'CategoriaProducto'
 
-    def __str__(self):
-        return "Titulo: {}".format(self.titulo)
 
-class CarritoCompras(models.Model):
-    usuario = models.ForeignKey(get_user_model(), related_name="carrito_usuario", on_delete=models.CASCADE)
-    producto = models.ForeignKey(Producto, related_name="producto_carrito", on_delete=models.CASCADE)
-    precio = models.IntegerField()
-    direccion = models.CharField(max_length=300)
-    datos_payu = models.CharField(max_length=600)
-    comprado = models.BooleanField(default=False)
-    pendiente = models.BooleanField(default=False)
+class Producto(Model):
+    Nombre = CharField(max_length=150)
+    Precio = FloatField(default=0.0)
+    Descripcion = CharField(max_length=200)
+    Imagen = ImageField(upload_to='imagenes_productos_inventario')
+    Stock = FloatField(default=0.0)
+    FK_Categoria = ForeignKey(CategoriaProducto, on_delete=CASCADE)
 
-    def __str__(self):
-        return "Usuario: {} Producto: {}".format(self.usuario, self.producto)
+    class Meta:
+        db_table = 'Producto'
+
+
+class CarritoTieneProductos(Model):
+    FK_Producto = ForeignKey(Producto, on_delete=CASCADE)
+    FK_Carrito = ForeignKey(CarritoCompras, on_delete=CASCADE)
+    Cantidad = IntegerField(default=1)
+
+    class Meta:
+        db_table = 'CarritoTieneProductos'
+
+
+class TiposDeEnvio(Model):
+    Nombre = CharField(max_length=150)
+    Clasificacion = CharField(max_length=150)
+    Descripcion = CharField(max_length=200)
+
+    class Meta:
+        db_table = 'TiposDeEnvio'
+
+
+class HistorialCompras(Model):
+    FK_UsuarioCliente = ForeignKey(get_user_model(), on_delete=CASCADE)
+    NumeroDeOrden = CharField(max_length=100)
+    TipoEnvio = CharField(max_length=100)
+
+    class Meta:
+        db_table = 'HistorialCompras'
+
+
+class ProductoComprado(Model):
+    Cantidad = IntegerField(default=1)
+    Nombre = CharField(max_length=150)
+    Precio = FloatField(default=0.0)
+    Descripcion = CharField(max_length=200)
+    Imagen = ImageField(upload_to='imaenges_productos_comprados')
+    FK_HistorialCompras = ForeignKey(HistorialCompras, on_delete=CASCADE)
+
+    class Meta:
+        db_table = 'ProductoComprado'
