@@ -14,14 +14,6 @@ class DetalleProducto(DetailView):
     template_name = 'detalle.html'
     model = Producto
 
-class ComentarioProducto(CreateView):
-    template_name = 'detalle.html'
-    model = Comentario
-    fields = ('comentario','usuario','producto',)
-
-    def get_success_url(self):
-        return "/detalle_producto/{}/".format(self.object.producto.pk)
-
 
 class ListadoProducto(ListView):
     template_name = 'listado_productos.html'
@@ -71,11 +63,13 @@ class AniadirCarrito(LoginRequiredMixin, CreateView):
     success_url = reverse_lazy('indice')
     login_url = 'ingresar'
 
+
 class EliminarCarrito(LoginRequiredMixin,DeleteView):
     queryset = CarritoCompras.objects.filter(comprado=False)
     model = CarritoCompras
     success_url = reverse_lazy('indice')
     login_url = 'ingresar'
+
 
 class ListarCarrito(LoginRequiredMixin,ListView):
     template_name = 'carrito.html'
@@ -88,6 +82,7 @@ class ListarCarrito(LoginRequiredMixin,ListView):
         context['tab'] = 'sincomprar'
         return context
 
+
 class ListarCarritoPendientes(LoginRequiredMixin,ListView):
     template_name = 'carrito.html'
     model = CarritoCompras
@@ -98,6 +93,7 @@ class ListarCarritoPendientes(LoginRequiredMixin,ListView):
         context = super(ListarCarritoPendientes, self).get_context_data(**kwargs)
         context['tab'] = 'pendientes'
         return context
+
 
 class ListarCarritoFinalizadas(LoginRequiredMixin,ListView):
     template_name = 'carrito.html'
