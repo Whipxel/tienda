@@ -6,7 +6,7 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
 #Importando vistas de pagina
-from tienda.users.views import (Indice, ListadoProducto, DetalleProducto, ComentarioProducto, Ingresar, Salir, CambiarPerfil, AniadirCarrito,
+from tienda.users.views import (Indice, ListadoProducto, DetalleProducto, Ingresar, Salir, CambiarPerfil, AniadirCarrito,
 ListarCarrito, ListarCarritoPendientes, ListarCarritoFinalizadas, EliminarCarrito
 )
 
@@ -16,8 +16,6 @@ urlpatterns = [
     path('listado_productos', ListadoProducto.as_view(),name='listado_productos'),
 
     path('detalle_producto/<int:pk>/',DetalleProducto.as_view(),name='detalle_productos'),
-
-    path('crear_comentario/', ComentarioProducto.as_view(), name='crear_comentario'),
 
     path(settings.ADMIN_URL, admin.site.urls),
 
