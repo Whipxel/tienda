@@ -5,8 +5,11 @@ from django.urls import include, path
 from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
-#Importando vistas de pagina
-from tienda.users.views import (Indice, ListadoProducto, DetalleProducto, ComentarioProducto, Ingresar, Salir, CambiarPerfil, AniadirCarrito,
+# Importar vistas de manejo de usuarios y login
+from tienda.users.views import (Indice, Ingresar, Salir, CambiarPerfil)
+
+# Importar vistas de productos, inventario y ventas
+from tienda.productos.views import (ListadoProducto, DetalleProducto, AniadirCarrito,
 ListarCarrito, ListarCarritoPendientes, ListarCarritoFinalizadas, EliminarCarrito
 )
 
@@ -16,8 +19,6 @@ urlpatterns = [
     path('listado_productos', ListadoProducto.as_view(),name='listado_productos'),
 
     path('detalle_producto/<int:pk>/',DetalleProducto.as_view(),name='detalle_productos'),
-
-    path('crear_comentario/', ComentarioProducto.as_view(), name='crear_comentario'),
 
     path(settings.ADMIN_URL, admin.site.urls),
 
@@ -36,7 +37,7 @@ urlpatterns = [
     path('listar_finalizado/',ListarCarritoFinalizadas.as_view(), name='listar_finalizado'),
 
     path('eliminar_carrito/<int:pk>/',EliminarCarrito.as_view(), name='eliminar_carrito'),
-    
+
     # User management
     #path("users/", include("tienda.users.urls", namespace="users")),
     #path("accounts/", include("allauth.urls")),
