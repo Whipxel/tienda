@@ -6,6 +6,7 @@ from django.views import defaults as default_views
 from django.views.generic import TemplateView
 
 # Importar vistas de manejo de usuarios y login
+#Importando vistas de pagina
 from tienda.users.views import (Indice, Ingresar, Salir, CambiarPerfil)
 
 # Importar vistas de productos, inventario y ventas
@@ -37,7 +38,7 @@ urlpatterns = [
     path('listar_finalizado/',ListarCarritoFinalizadas.as_view(), name='listar_finalizado'),
 
     path('eliminar_carrito/<int:pk>/',EliminarCarrito.as_view(), name='eliminar_carrito'),
-
+    
     # User management
     #path("users/", include("tienda.users.urls", namespace="users")),
     #path("accounts/", include("allauth.urls")),
